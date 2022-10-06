@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SagaImporter": {
+      "commandName": "Project",
+      "commandLineArgs": "lookup -b -d \"C:\\TestAudio\\audiobook-new.db\""
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "FileVersion": 2,
+  "Id": "b33536c8-cc18-4b63-935b-4c0440353918",
+  "Items": [
+    {
+      "Id": "3d9a0039-1804-48c5-9a5e-7a5c68f92d41",
+      "Command": "lookup -b -d \"C:\\TestAudio\\audiobook-new.db\""
+    },
+    {
+      "Id": "6cd75136-1f9c-41b5-96c7-50d904ee0b0a",
+      "Command": "input -d \"C:\\TestAudio\\audiobook.db\" -i \"C:\\TestAudio\\Books\""
+    }
+  ]
+}

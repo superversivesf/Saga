@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SagaServer", "SagaServer.csproj", "{6245589B-9FC0-4FAB-906D-4F2F07C1B013}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SagaDb", "..\SagaDb\SagaDb.csproj", "{2CC190BC-6090-46EB-AAA6-9A70EB291E3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SagaUtil", "..\SagaUtil\SagaUtil.csproj", "{460A0967-CA8C-4514-9F16-159DFD92902D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6245589B-9FC0-4FAB-906D-4F2F07C1B013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6245589B-9FC0-4FAB-906D-4F2F07C1B013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6245589B-9FC0-4FAB-906D-4F2F07C1B013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6245589B-9FC0-4FAB-906D-4F2F07C1B013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC190BC-6090-46EB-AAA6-9A70EB291E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC190BC-6090-46EB-AAA6-9A70EB291E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC190BC-6090-46EB-AAA6-9A70EB291E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC190BC-6090-46EB-AAA6-9A70EB291E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460A0967-CA8C-4514-9F16-159DFD92902D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460A0967-CA8C-4514-9F16-159DFD92902D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460A0967-CA8C-4514-9F16-159DFD92902D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460A0967-CA8C-4514-9F16-159DFD92902D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {144B5A66-D995-4388-9799-8B681C45254A}
+	EndGlobalSection
+EndGlobal
