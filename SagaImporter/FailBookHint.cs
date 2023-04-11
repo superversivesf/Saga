@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SagaImporter;
 
-namespace SagaImporter
+internal class FailBookHint
 {
-    class FailBookHint
-    {
-        public string Title { get; set; }
-        public string GoodreadsLink { get; set; }
-        public string BookId { get; set; }
-    }
-
+    public string Title { get; set; }
+    public string GoodreadsLink { get; set; }
+    public string BookId { get; set; }
 }

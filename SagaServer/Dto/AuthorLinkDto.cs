@@ -1,25 +1,24 @@
 ﻿using System;
 
-namespace SagaServer.Dto
+namespace SagaServer.Dto;
+
+public class AuthorLinkDto : IEquatable<AuthorLinkDto>
 {
-    public class AuthorLinkDto : IEquatable<AuthorLinkDto>
+    public string AuthorId { get; set; }
+    public string AuthorName { get; set; }
+
+    bool IEquatable<AuthorLinkDto>.Equals(AuthorLinkDto other)
     {
-        public string AuthorId { get; set; }
-        public string AuthorName { get; set; }
+        var _result = AuthorId.Equals(other.AuthorId) && AuthorName.Equals(other.AuthorName);
+        return _result;
+    }
 
-        bool IEquatable<AuthorLinkDto>.Equals(AuthorLinkDto other)
-        {
-            var _result = this.AuthorId.Equals(other.AuthorId) && this.AuthorName.Equals(other.AuthorName);
-            return _result;
-        }
+    public override int GetHashCode()
+    {
+        var hashProductName = AuthorName == null ? 0 : AuthorName.GetHashCode();
+        var hashProductLink = AuthorId == null ? 0 : AuthorId.GetHashCode();
 
-        public override int GetHashCode()
-        {
-            int hashProductName = AuthorName == null ? 0 : AuthorName.GetHashCode();
-            int hashProductLink = AuthorId == null ? 0 : AuthorId.GetHashCode();
-
-            //Calculate the hash code for the product.
-            return hashProductName ^ hashProductLink;
-        }
+        //Calculate the hash code for the product.
+        return hashProductName ^ hashProductLink;
     }
 }

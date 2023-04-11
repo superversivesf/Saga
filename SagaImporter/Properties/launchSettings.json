@@ -2,7 +2,7 @@
   "profiles": {
     "SagaImporter": {
       "commandName": "Project",
-      "commandLineArgs": "lookup -b -d \"C:\\TestAudio\\audiobook-new.db\""
+      "commandLineArgs": "lookup -d /home/jason/BookTesting/audiobook.db -b"
     }
   }
 }

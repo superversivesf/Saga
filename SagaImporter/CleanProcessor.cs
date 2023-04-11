@@ -1,76 +1,70 @@
-﻿using SagaDb.Database;
-using SagaImporter;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
+using SagaDb.Database;
 
-namespace SagaImporter
+namespace SagaImporter;
+
+internal class CleanProcessor
 {
-    class CleanProcessor
+    private BookCommands _bookCommands;
+
+    internal bool Initialize(CleanOptions c)
     {
-        private BookCommands _bookCommands;
+        _bookCommands = new BookCommands(c.DatabaseFile);
+        return true;
+    }
 
-        internal bool Initialize(CleanOptions c)
+    internal void Execute()
+    {
+        var _books = _bookCommands.GetBooks();
+        var _removeBookCount = 0;
+        var _removeAuthorCount = 0;
+        var _removeSeriesCount = 0;
+
+        foreach (var book in _books)
+            if (!Directory.Exists(book.BookLocation))
+            {
+                var title = book.BookTitle;
+                _bookCommands.RemoveBookToSeriesLinksByBook(book);
+                _bookCommands.RemoveBookToAuthorLinksByBook(book);
+                _bookCommands.RemoveBookToGenreLinksByBook(book);
+                _bookCommands.RemoveBookToAudioLinksAndAudioFilesByBook(book);
+                _bookCommands.RemoveBook(book);
+                _removeBookCount++;
+                Console.WriteLine($"Removed {title}: Directory Missing");
+            }
+
+        var _authors = _bookCommands.GetAuthors();
+
+        foreach (var author in _authors)
         {
-            this._bookCommands = new BookCommands(c.DatabaseFile);
-            return true;
+            var _bookCount = _bookCommands.GetBooksByAuthorId(author.AuthorId).ToList().Count();
+
+            if (_bookCount == 0)
+            {
+                Console.WriteLine($"Orphaned Author: {author.AuthorName}");
+                _bookCommands.RemoveAuthor(author);
+                _removeAuthorCount++;
+            }
         }
-        internal void Execute()
+
+        var _series = _bookCommands.GetAllSeries();
+
+        foreach (var series in _series)
         {
-            var _books = this._bookCommands.GetBooks();
-            int _removeBookCount = 0;
-            int _removeAuthorCount = 0;
-            int _removeSeriesCount = 0;
+            var _bookCount = _bookCommands.GetSeriesBooks(series.SeriesId).ToList().Count();
 
-            foreach (var book in _books)
+            if (_bookCount == 0)
             {
-                if (!Directory.Exists(book.BookLocation))
-                {
-                    var title = book.BookTitle;
-                    this._bookCommands.RemoveBookToSeriesLinksByBook(book);
-                    this._bookCommands.RemoveBookToAuthorLinksByBook(book);
-                    this._bookCommands.RemoveBookToGenreLinksByBook(book);
-                    this._bookCommands.RemoveBookToAudioLinksAndAudioFilesByBook(book);
-                    this._bookCommands.RemoveBook(book);
-                    _removeBookCount++;
-                    Console.WriteLine($"Removed {title}: Directory Missing");
-                }
+                Console.WriteLine($"Orphaned Series: {series.SeriesName}");
+                _bookCommands.RemoveSeries(series);
+                _removeSeriesCount++;
             }
-
-            var _authors = this._bookCommands.GetAuthors();
-
-            foreach (var author in _authors)
-            {
-                var _bookCount = this._bookCommands.GetBooksByAuthorId(author.AuthorId).ToList().Count();
-
-                if (_bookCount == 0)
-                {
-                    Console.WriteLine($"Orphaned Author: {author.AuthorName}");
-                    this._bookCommands.RemoveAuthor(author);
-                    _removeAuthorCount++;
-                }
-            }
-
-            var _series = this._bookCommands.GetAllSeries();
-
-            foreach (var series in _series)
-            {
-                var _bookCount = this._bookCommands.GetSeriesBooks(series.SeriesId).ToList().Count();
-
-                if (_bookCount == 0)
-                {
-                    Console.WriteLine($"Orphaned Series: {series.SeriesName}");
-                    this._bookCommands.RemoveSeries(series);
-                    _removeSeriesCount++;
-                }
-            }
-
-            Console.WriteLine($"Removed {_removeBookCount} books from library");
-            Console.WriteLine($"Removed {_removeAuthorCount} authors from library");
-            Console.WriteLine($"Removed {_removeSeriesCount} series from library");
-
         }
+
+        Console.WriteLine($"Removed {_removeBookCount} books from library");
+        Console.WriteLine($"Removed {_removeAuthorCount} authors from library");
+        Console.WriteLine($"Removed {_removeSeriesCount} series from library");
     }
 }

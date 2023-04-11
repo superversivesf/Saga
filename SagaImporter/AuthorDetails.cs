@@ -1,11 +1,10 @@
 ﻿using SagaDb.Models;
 
-namespace SagaImporter
+namespace SagaImporter;
+
+public class AuthorDetails
 {
-    public class AuthorDetails
-    { 
-        public string AuthorName { get; set; }
-        public string AuthorLink { get; set; }
-        public AuthorType AuthorType { get; set; }
-    }
+    public string AuthorName { get; set; }
+    public string AuthorLink { get; set; }
+    public AuthorType AuthorType { get; set; }
 }

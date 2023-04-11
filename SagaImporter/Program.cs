@@ -48,30 +48,29 @@ namespace SagaImporter
                 switch (obj)
                 {
                     case InputOptions i:
-                        var inputProcess = new InputProcessor();
-                        inputProcess.Initialize(i);
-                        inputProcess.Execute();
+                        var _inputProcess = new InputProcessor();
+                        _inputProcess.Initialize(i);
+                        _inputProcess.Execute();
                         break;
                     case OutputOptions o:
-                        var outputProcess = new OutputProcessor();
-                        outputProcess.Initialize(o);
-                        outputProcess.Execute();
+                        var _outputProcess = new OutputProcessor();
+                        _outputProcess.Initialize(o);
+                        _outputProcess.Execute();
                         break;
                     case LookupOptions l:
-                        //var lookupProcess = new LookupProcessor_GoodReads();
-                        var lookupProcess = new LookupProcessor_GoogleBooks();
-                        lookupProcess.Initialize(l);
-                        lookupProcess.Execute();
+                        var _lookupProcess = new LookupProcessor_GoogleBooks();
+                        _lookupProcess.Initialize(l);
+                        _lookupProcess.Execute();
                         break;
                     case DumpOptions d:
-                        var dumpProcess = new DumpProcessor();
-                        dumpProcess.Initialize(d);
-                        dumpProcess.Execute();
+                        var _dumpProcess = new DumpProcessor();
+                        _dumpProcess.Initialize(d);
+                        _dumpProcess.Execute();
                         break;
                     case CleanOptions c:
-                        var cleanProcess = new CleanProcessor();
-                        cleanProcess.Initialize(c);
-                        cleanProcess.Execute();
+                        var _cleanProcess = new CleanProcessor();
+                        _cleanProcess.Initialize(c);
+                        _cleanProcess.Execute();
                         break;
                 }
             }

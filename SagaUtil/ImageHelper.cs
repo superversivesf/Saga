@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 
+namespace SagaUtil;
 
-namespace SagaUtil
+public static class ImageHelper
 {
-    public static class ImageHelper
+    public static byte[] DownloadImage(string fromUrl)
     {
-        public static byte[] DownloadImage(string fromUrl)
-        {
-            HttpClient httpClient = new HttpClient();
-            var _request = httpClient.GetByteArrayAsync(fromUrl);
-            _request.Wait();
-            byte[] data = _request.Result;
-            return data;
-        }
+        var httpClient = new HttpClient();
+        var _request = httpClient.GetByteArrayAsync(fromUrl);
+        _request.Wait();
+        var data = _request.Result;
+        return data;
     }
 }
