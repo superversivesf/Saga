@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -128,30 +129,114 @@ namespace SagaImporter
 
         private GBQueryResult SearchGoogleBooks(Book book, List<Author> authors)
         {
+            var results = new List<Items>();
             foreach (var a in authors)
             {
                 var authorName = a.AuthorName.ToLower();
-
-                var bookResults = DoGoogleBooksQuery(authorName);                
-
+                var bookResults = DoGoogleBooksQuery(authorName);
+                results.AddRange(bookResults);
             }
-            
-            return new GBQueryResult("book", new List<string>(), "link");
+
+            var queryResult = MatchBookResults(results, book, authors);
+
+            return queryResult;
         }
 
-        private object DoGoogleBooksQuery(string authorName)
+        private GBQueryResult MatchBookResults(List<Items> items, Book book, List<Author> authors)
         {
-            var query = $"{Googlebooks}?q=inauthor:{authorName}";
-            var jsonResult = DoWebQuery(query);
-            GoogleBooksDto results = JsonConvert.DeserializeObject<GoogleBooksDto>(jsonResult);
+            GBQueryResult bestMatch = null;
+            var bestMatchScore = 0;
+            var normalBookTitle = NormalizeTitle(book.BookTitle);
+            var normalAuthorStrings = authors.Select(x => NormalizeAuthor(x.AuthorName)).ToList();
             
+            foreach (var i in items)
+            {
+                double score = CalculateMatch(i, normalBookTitle, normalAuthorStrings);
+
+                if (score > bestMatchScore)
+                {
+                    var t = i.volumeInfo.title;
+                    var a = i.volumeInfo.authors.ToList();
+                    var l = i.selfLink;
+
+                    bestMatch = new GBQueryResult(t, a, l);
+                }
+            }
+
+            return bestMatch;
+        }
+
+        private int CalculateMatch(Items i, string book, List<string> authors)
+        {
+            var t = NormalizeTitle(i.volumeInfo.title);
+            var a = i.volumeInfo.authors.Select(x => NormalizeAuthor(x)).ToList();
+            
+            // Calculate how close the book match lev distance?
+            
+            // Calculate how close the author matches are
+            
+            // score increases for each match
+            
+            // Then normalize to out of 100. 
+            
+            return 0;
+        }
+        
+        private string NormalizeAuthor(string s)
+        {
+            //Regex.Replace(a.AuthorName, @"\s+", " ").Tr
+            s = Regex.Replace(s, @"\s*,?\s*Jr\.?\s*$", string.Empty, RegexOptions.IgnoreCase)
+                .Trim(); // Remove Jr and cominations there of at end of string)
+            s = s.Replace('"', ' ').Replace("'", " "); // E.E. "Doc" Smith case
+
+            return Regex.Replace(s, @"\s+", string.Empty).Replace(".", string.Empty).ToLower().Trim();
+        }
+
+        private string NormalizeTitle(string s)
+        {
+            s = s.ToLower().Replace(":", " ").Replace("_", " ").Replace("?", " ").Replace("!", " ").Replace("'", "")
+                .Replace("'", "").Replace("-", " ");
+
+            if (s.StartsWith("the")) s = s.Substring(3).Trim();
+
+            s = Regex.Replace(s, @"^the\s+|-\s*the\s+", string.Empty);
+            s = Regex.Replace(s, @"^a\s+|-\s*a\s+", string.Empty);
+            s = s.Replace("-", " ").Replace(",", " ");
+
+            return Regex.Replace(s, @"\s+", " ").Trim();
+        }
+
+        private List<Items> DoGoogleBooksQuery(string authorName)
+        {
+            var index = 0;
+            var items = new List<Items>();
+
+            while (true)
+            {
+                var query = $"{Googlebooks}?q=inauthor:{authorName}&startIndex={index}&maxResults=20";
+                Console.WriteLine(query);
+                var jsonResult = DoWebQuery(query);
+                if (jsonResult != null)
+                {
+                    GoogleBooksDto results = JsonConvert.DeserializeObject<GoogleBooksDto>(jsonResult);
+
+                    if (results.items != null)
+                        items.AddRange(results.items);
+                    else
+                        break;
+                    index += 20;
+                }
+            }
+
+            return items;
+
             // Need to paginate results and get all the book results. 
             // https://www.googleapis.com/books/v1/volumes?q=harry+potter&startIndex=0&maxResults=40
             // Move the index till you get them all and stop when number of results less than
             // max results. 
-            
+
             // Cover images https://books.google.com/books/content?id=2ld0CwAAQBAJ&printsec=frontcover&img=1&zoom=100
-            
+
         }
 
         private string DoWebQuery(string query)
