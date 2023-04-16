@@ -12,7 +12,7 @@ public class GBQueryResult
     
     public GBQueryResult(string title, List<string> authors, string link)
     {
-        this.Link = Link;
+        this.Link = link;
         this.Authors = authors;
         this.Title = title;
     }

@@ -91,7 +91,8 @@ internal class LookupProcessorGoodReads
                     books = _bookCommands.GetBooksMissingLookup();
                 Console.WriteLine($"Processing {books.Count} books");
 
-                books.Sort((x, y) => String.Compare(x.BookId, y.BookId, StringComparison.Ordinal)); // Not in alphabetical order
+                books.Sort((x, y) =>
+                    string.Compare(x.BookId, y.BookId, StringComparison.Ordinal)); // Not in alphabetical order
                 // var shuffled = myList.OrderBy(x => Guid.NewGuid()).ToList();
 
                 foreach (var book in books)
@@ -127,7 +128,7 @@ internal class LookupProcessorGoodReads
             }
         }
 
-        int i = 1;
+        var i = 1;
         int count;
 
         if (_purge)
@@ -347,7 +348,8 @@ internal class LookupProcessorGoodReads
             }
 
         if (authorData != null && authorData.DocumentNode.SelectNodes(
-                "//div[@class=\"rightContainer\"]//div[@class=\"aboutAuthorInfo\"]//span[contains(@id, \"freeText\")]") is { } descNodes)
+                    "//div[@class=\"rightContainer\"]//div[@class=\"aboutAuthorInfo\"]//span[contains(@id, \"freeText\")]")
+                is { } descNodes)
         {
             if (descNodes.Count > 1)
                 authorDescription.AuthorDesc = descNodes[1].InnerHtml;
@@ -484,12 +486,13 @@ internal class LookupProcessorGoodReads
     {
         var coverImageLink = leftNode.SelectSingleNode("//img[@class='ResponsiveImage']")
             ?.GetAttributeValue("src", string.Empty);
-        
+
         var bookData = rightNode;
-        var title = HttpUtility.HtmlDecode(bookData.SelectSingleNode("//h1[@class=\"Text Text__title1\"]")?.InnerText.Trim());
+        var title = HttpUtility.HtmlDecode(bookData.SelectSingleNode("//h1[@class=\"Text Text__title1\"]")?.InnerText
+            .Trim());
         var authorNodes = bookData.SelectNodes("//div[contains(@class, 'ContributorLinksList')]");
         var moreAuthorNodes = bookData.SelectNodes("//span[@class='toggleContent']/a[@class='authorName']");
-        
+
         var authors = ProcessAuthorDetails(authorNodes, moreAuthorNodes);
         var seriesLabel = bookData.SelectSingleNode("//h2[@id=\"bookSeries\"]/a")?.InnerText.Trim();
         var seriesLinkElement = bookData.SelectSingleNode("//h2[@id=\"bookSeries\"]/a");
@@ -660,7 +663,8 @@ internal class LookupProcessorGoodReads
                     _authorDetailsList.Add(authorDetails);
                 }
 
-                if (_description != null && (_description.ToLower().Contains("foreword") || _description.ToLower().Contains("introduction")))
+                if (_description != null && (_description.ToLower().Contains("foreword") ||
+                                             _description.ToLower().Contains("introduction")))
                 {
                     var authorDetails = new AuthorDetails();
                     authorDetails.AuthorLink = _link;
